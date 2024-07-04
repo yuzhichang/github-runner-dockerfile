@@ -1,0 +1,29 @@
+services:
+  runner:
+    image: infiniflow/github_action_runner:latest
+    # https://docs.docker.com/compose/environment-variables/
+    # The variables in env file will be exported to all process of the container.
+    # The github action runner needs following env variables: REPO, TOKEN, EXTRA_LABELS, HOST_HOSTNAME, WORK_DIRECTORY_PREFIX
+    env_file: ".env"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${WORK_DIRECTORY_PREFIX}:${WORK_DIRECTORY_PREFIX}
+    privileged: true
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    deploy:
+      mode: replicated
+      replicas: 4
+      resources:
+        limits:
+          cpus: '16.0'
+        reservations:
+          cpus: '4.0'
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    
