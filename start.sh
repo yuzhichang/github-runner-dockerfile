@@ -10,7 +10,8 @@ REG_TOKEN=$(curl -X POST -H "Authorization: token ${ACCESS_TOKEN}" -H "Accept: a
 
 cd /home/docker/actions-runner
 
-./config.sh --url https://github.com/${REPOSITORY} --token ${REG_TOKEN}
+LABELS_OPT=${LABELS:+--labels $LABELS}
+./config.sh --url https://github.com/${REPOSITORY} --token ${REG_TOKEN} ${LABELS_OPT}
 
 cleanup() {
     echo "Removing runner..."

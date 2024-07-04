@@ -1,14 +1,13 @@
-FROM ubuntu:20.04
+FROM ubuntu:24.04
 
-ARG RUNNER_VERSION="2.294.0"
+ARG RUNNER_VERSION="2.317.0"
 
 # Prevents installdependencies.sh from prompting the user and blocking the image creation
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt update -y && apt upgrade -y && useradd -m docker
 RUN apt install -y --no-install-recommends \
-    curl jq build-essential libssl-dev libffi-dev python3 python3-venv python3-dev python3-pip
-
+    curl jq build-essential libssl-dev libffi-dev libicu-dev python3 python3-venv python3-dev python3-pip gawk sed wget
 
 RUN cd /home/docker && mkdir actions-runner && cd actions-runner \
     && curl -O -L https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz \
